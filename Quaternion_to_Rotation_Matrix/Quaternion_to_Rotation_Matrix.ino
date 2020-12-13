@@ -24,8 +24,8 @@ void loop() {
   for (int i {}; i < accBodyVector.GetRowCount(); i++)  {
     Serial1.println(accBodyVector(i));
   }
-  Serial1.println("======================");
-
+  Serial1.println("=================================================");
+  
   rotMatrix(0,0) = (1 - (2 * qY * qY) - (2 * qZ * qZ)); rotMatrix(0,1) = ((2 * qX * qY) - (2 * qZ * qW)); rotMatrix(0,2) = ((2* qX * qZ) + (2 * qY * qW));
   rotMatrix(1,0) = ((2 * qX * qY) + (2 * qZ * qW)); rotMatrix(1,1) = (1 - (2 * qX * qX) - (2 * qZ *qZ));  rotMatrix(1,2) = ((2 * qY * qZ) - (2 * qX * qW));
   rotMatrix(2,0) = ((2 * qX * qZ) - (2 * qY * qW)); rotMatrix(2,1) = ((2 * qY * qZ) + (2 * qX * qW)); rotMatrix(2,2) = (1 - (2 * qX * qX) - (2 * qY * qY));
@@ -38,7 +38,7 @@ void loop() {
     }
     Serial1.println();
   }
-  Serial1.println("======================");
+  Serial1.println("=================================================");
 
   rotMatrixInv = rotMatrix.Inverse();
 
@@ -50,7 +50,7 @@ void loop() {
     }
     Serial1.println();
   }
-  Serial1.println("======================");
+  Serial1.println("=================================================");
 
   accNEDVector = rotMatrixInv * accBodyVector;
   
@@ -58,7 +58,7 @@ void loop() {
   for (int i {}; i < accNEDVector.GetRowCount(); i++)  {
     Serial1.println(accNEDVector(i));
   }
-  Serial1.println("======================");
+  Serial1.println("=================================================");
 
   while (1) {
   }
