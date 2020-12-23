@@ -1,16 +1,20 @@
 #include <BasicLinearAlgebra.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 using namespace BLA;
 
-double accX {1}, accY {2}, accZ {3};
+double accX {0}, accY {0}, accZ {1};
 double accN {}, accE {}, accD {};
-double qW {1}, qX {0.5}, qY {4.3}, qZ {0.68};
-double qN {};
+double qW {1}, qX {0}, qY {0}, qZ {0}, qN {};
+double heading {}, pitch {}, roll {};
 
 BLA::Matrix<3> accBodyVector;
 BLA::Matrix <3> accNEDVector;
 BLA::Matrix <3,3> rotMatrix;
 BLA::Matrix <3,3> rotMatrixInv;
+
+double rad_to_deg(double);
 
 void setup() {
   Serial1.begin(9600);
@@ -77,6 +81,36 @@ void loop() {
   }
   Serial1.println("=================================================");
 
+    // roll (x-axis rotation)
+    double sinr_cosp = 2 * (qW * qX + qY * qZ);
+    double cosr_cosp = 1 - 2 * (qX * qX + qY * qY);
+    roll = std::atan2(sinr_cosp, cosr_cosp);
+
+    // pitch (y-axis rotation)
+    double sinp = 2 * (qW * qY - qZ * qX);
+    if (std::abs(sinp) >= 1)
+        pitch = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+    else
+        pitch = std::asin(sinp);
+
+    // yaw (z-axis rotation)
+    double siny_cosp = 2 * (qW * qZ + qX * qY);
+    double cosy_cosp = 1 - 2 * (qY * qY + qZ * qZ);
+    heading = std::atan2(siny_cosp, cosy_cosp);
+
+  Serial1.println("Print Orientation");
+  Serial1.print(roll, 6);
+  Serial1.print("\t");
+  Serial1.print(pitch, 6);
+  Serial1.print("\t");
+  Serial1.println(heading, 6);
+
+  Serial1.println("=================================================");
+
   while (1) {
   }
+}
+
+double rad_to_deg(double val) {
+  return val * 180/PI;
 }
